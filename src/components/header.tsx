@@ -10,17 +10,33 @@ const HeaderWrapper = styled.header`
     padding: 0.5rem 1rem;
 `
 
+const HeaderTitle = styled.div`
+    font-size: 1.5rem;
+`
+
 const HeaderControl = styled.div`
     align-content: center;
-    diplay: flex;    
+    diplay: flex;
+    height: 2rem;
+    justify-content: center;
+
+    & > * {
+        margin-left: 0.5rem;
+    }
 `
 
 interface Props {
-    cancel?: boolean,
-    children: string,
+    title?: string,
+    children: React.ReactNode,
 }
 
-export const header: React.FC<Props> = (props) => (
-    <>
-    </>
+export const Header: React.FC<Props> = (props) => (
+    <HeaderWrapper>
+        <HeaderTitle>
+            {props.title}
+        </HeaderTitle>
+        <HeaderControl>
+            {props.children}
+        </HeaderControl>
+    </HeaderWrapper>
 )

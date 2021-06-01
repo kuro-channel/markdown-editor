@@ -1,15 +1,46 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { Button } from '../components/button';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { Header } from '../components/header';
+import { getMemos, MemoRecord } from '../indexeddb/memos';
+
+const { useState, useEffect } = React;
+
+const Wrapper = styled.div`
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 3rem;
+  padding: 0 1rem;
+`
+const HeaderArea = styled.div`
+  position: fixed;
+  right: 0;
+  top: 0;
+  left: 0;
+`
 
 export const History: React.FC = () => {
-    const history = useHistory();
+    const [memos, setMemos] = useState<MemoRecord[]>([]);
+    console.log(memos);
+
+    useEffect(() => {
+        getMemos().then(setMemos)
+    }, []);
+
     return (
         <>
-            <h1>History</h1>
-            <Button onClick={() => history.push('/editor')}>
-                エディタに戻る
-            </Button>
+            <HeaderArea>
+                <Header title="履歴">
+                    <Link to="/editor">
+                        エディタに戻る
+                    </Link>
+                </Header>
+            </HeaderArea>
+            <Wrapper>
+                TODO: 履歴表示
+            </Wrapper>
         </>
     )
 }
