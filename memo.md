@@ -1,9 +1,9 @@
-## マークダウンエディタ概要
+# マークダウンエディタ概要
 - テキスト入力機能
 - マークダウンのリアルタイムプレビュー機能
 - テキストの保存と復元機能
 
-### 画面
+## 画面
 - エディタ画面
   - テキストの入力
   - リアルタイムプレビュー
@@ -13,8 +13,8 @@
   - 保存したテキストの一覧表示
   - テキストの復元
 
-### 使用技術
-- styled-components
+## 使用技術
+### styled-components
   - CSSライブラリ
   - styled.(HTMLタグ名)で生成したいHTMLタグを指定して、その後続く``内にCSSを記述すると、そのコンポーネントにスタイルが適用される。
 ```
@@ -23,52 +23,27 @@ const Header = styled.h1`
 `
 ```
 
-- useState
-  - [React公式リンク](https://ja.reactjs.org/docs/hooks-state.html
+### useState
+  - [React公式リンク](https://ja.reactjs.org/docs/hooks-state.html)
   - React内で状態を管理するための機能。今回のマークダウンエディタでは、「テキストエリアで入力されたテキスト情報」を管理する。
   - ```const [値, 値をセットする関数] = useState<扱う状態の型>(初期値)```
   - useState に初期値を渡すと、初回レンダリング時には初期値が、以降は「値をセットする関数」によって更新された値が取得できる。
   - useStateが変更されるごとに、コンポーネントが再レンダリングされる。
   
-- Web Storage
+### Web Storage
   - ブラウザに実装されているキーバリューストア
   - [Web Storage API](https://developer.mozilla.org/ja/docs/Web/API/Web_Storage_API)
   - localStorage は永続的にデータを保存する。 ※localStorageは容量の上限がある（Chromeは5MB）等あるので、大量のデータは保存しないようにする。
 
-- IndexedDB
+### IndexedDB
   - ブラウザに実装されているデータを保存するデータベースの機能
   - key-valueストアのDB
   - [IndexedDB API](https://developer.mozilla.org/ja/docs/Web/API/IndexedDB_API/Basic_Concepts_Behind_IndexedDB)
 
-- カスタムフック
+### カスタムフック
   - [独自フックの作成](https://ja.reactjs.org/docs/hooks-custom.html)
-
-- useEffect
-  - [副作用フック](https://ja.reactjs.org/docs/hooks-overview.html#effect-hook)
-```javascript
-import React, { useState, useEffect } from 'react';
-
-function Example() {
-  const [count, setCount] = useState(0);
-
-  // Similar to componentDidMount and componentDidUpdate:
-  useEffect(() => {
-    // Update the document title using the browser API
-    document.title = `You clicked ${count} times`;
-  });
-
-  return (
-    <div>
-      <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
-    </div>
-  );
-}
-```
-  
-- Dexie
+ 
+### Dexie
   - ```npm i dexie```
   - IndexedDBをラップしたライブラリ [Dexie](https://dexie.org/)
 
@@ -116,5 +91,41 @@ async () => {
   } catch (err) {
     console.error(err);
   }
+}
+```
+
+### IndexedDBからのデータ取得と表示
+- Dexie.jsでオブジェクトを全件取得するには toArray を使用する  
+[Dexie.jsとTypeScriptでIndexedDBを操作する](https://noxi515.hateblo.jp/entry/2018/04/01/233950)
+
+- IndexedDBからテキスト履歴を取得するタイミング: 初期化処理時
+  - Reactで初期化を行いたい場合は、**useEffect**を使う/React Hooksの仲間
+
+### 重要: useEffect
+- useEffect: 副作用（effect）フック / **レンダリングの後に実行される**
+  - useEffect: 第1引数 > 実行したい関数を渡す
+  - useEffect: 第2引数 > 変更を監視する状態の配列を渡す（今回は[]: 空配列 を渡す）ずっと更新されないので初回のみ
+
+- [副作用フック](https://ja.reactjs.org/docs/hooks-overview.html#effect-hook)
+```javascript
+import React, { useState, useEffect } from 'react';
+
+function Example() {
+  const [count, setCount] = useState(0);
+
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    // Update the document title using the browser API
+    document.title = `You clicked ${count} times`;
+  });
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
 }
 ```
